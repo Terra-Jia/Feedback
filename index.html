@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>课程评价 · 公司战略与风险管理</title>
+    <!-- Font Awesome 6 (免费图标库，用于星星和图标) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f7ff 0%, #e9eef4 100%);
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* 课程头部卡片 */
+        .course-header {
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f1a24 100%);
+            border-radius: 2rem;
+            padding: 2rem 2rem 1.8rem;
+            margin-bottom: 2rem;
+            color: white;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s;
+        }
+
+        .course-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .course-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        .course-header p {
+            font-size: 1rem;
+            opacity: 0.85;
+            max-width: 75%;
+            line-height: 1.4;
+        }
+
+        /* 评分摘要卡片 */
+        .stats-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .avg-box {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .avg-score {
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: #1e4668;
+            line-height: 1;
+        }
+
+        .stars-big {
+            color: #f5b042;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+        }
+
+        .review-count {
+            color: #4b5563;
+            font-weight: 500;
+            background: #f1f5f9;
+            padding: 0.3rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+
+        .reset-btn {
+            background: #f1f5f9;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .reset-btn:hover {
+            background: #e2e8f0;
+            transform: scale(0.97);
+        }
+
+        /* 评价表单卡片 */
+        .form-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+        }
+
+        .form-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #0f2b3d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rating-area {
+            margin-bottom: 1.5rem;
+        }
+
+        .rating-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+            color: #1e293b;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 8px;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .star-rating i {
+            transition: transform 0.1s, color 0.1s;
+            color: #cbd5e1;
+        }
+
+        .star-rating i.active, .star-rating i.hover {
+            color: #f5b042;
+            text-shadow: 0 0 3px rgba(245,176,66,0.3);
+        }
+
+        .star-rating i:hover {
+            transform: scale(1.08);
+        }
+
+        .selected-value {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #f59e0b;
+            font-weight: 500;
+        }
+
+        .input-group {
+            margin-bottom: 1.3rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            background: #fefefe;
+        }
+
+        .input-group input:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+        }
+
+        .submit-btn {
+            background: #1e4668;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .submit-btn:hover {
+            background: #0f2f4a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 18px -6px rgba(0,0,0,0.2);
+        }
+
+        /* 评论区 */
+        .comments-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.8rem;
+            color: #0f2b3d;
+            border-left: 5px solid #f5b042;
+            padding-left: 1rem;
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .comment-item {
+            background: #fafcff;
+            border-radius: 1.2rem;
+            padding: 1.2rem 1.5rem;
+            border: 1px solid #edf2f7;
+            transition: 0.1s;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .comment-user {
+            font-weight: 700;
+            color: #1e4668;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comment-stars {
+            color: #f5b042;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .comment-date {
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+
+        .comment-text {
+            color: #2d3a4b;
+            line-height: 1.45;
+            margin: 10px 0 6px;
+            word-break: break-word;
+        }
+
+        .delete-comment {
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.1s;
+            padding: 4px;
+        }
+
+        .delete-comment:hover {
+            color: #ef4444;
+        }
+
+        .empty-msg {
+            text-align: center;
+            padding: 2rem;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+
+        @media (max-width: 680px) {
+            body {
+                padding: 1rem;
+            }
+            .course-header p {
+                max-width: 100%;
+            }
+            .stats-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .form-card, .comments-section {
+                padding: 1.3rem;
+            }
+            .star-rating {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 课程头部 -->
+    <div class="course-header">
+        <div class="course-badge">
+            <i class="fas fa-graduation-cap"></i> 财务管理专业 · 核心课程
+        </div>
+        <h1>📊 公司战略与风险管理</h1>
+        <p>Corporate Strategy & Risk Management —— 培养战略思维，洞察风险全局，融合思政素养与创新实践。</p>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="stats-card" id="statsCard">
+        <div class="avg-box">
+            <div>
+                <span class="avg-score" id="avgScore">0.0</span>
+                <span style="font-size:1rem;"> / 5.0</span>
+            </div>
+            <div class="stars-big" id="avgStarsDisplay">☆☆☆☆☆</div>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <div class="review-count" id="reviewCount">0 条评价</div>
+            <button class="reset-btn" id="clearAllBtn"><i class="fas fa-trash-alt"></i> 清空所有数据</button>
+        </div>
+    </div>
+
+    <!-- 评分 + 评论表单 -->
+    <div class="form-card">
+        <div class="form-title">
+            <i class="fas fa-pen-fancy" style="color:#f5b042;"></i> 分享你的学习体验
+        </div>
+        <div class="rating-area">
+            <span class="rating-label">你的评分 <span style="color:#ef4444;">*</span></span>
+            <div class="star-rating" id="starRatingWidget">
+                <i class="far fa-star" data-value="1"></i>
+                <i class="far fa-star" data-value="2"></i>
+                <i class="far fa-star" data-value="3"></i>
+                <i class="far fa-star" data-value="4"></i>
+                <i class="far fa-star" data-value="5"></i>
+            </div>
+            <div class="selected-value" id="selectedRatingMsg">未选择评分</div>
+        </div>
+        <div class="input-group">
+            <label><i class="fas fa-user"></i> 昵称 (选填)</label>
+            <input type="text" id="reviewerName" placeholder="例如：李明 / 匿名同学" maxlength="30">
+        </div>
+        <div class="input-group">
+            <label><i class="fas fa-comment-dots"></i> 课程评价 <span style="color:#ef4444;">*</span></label>
+            <textarea id="reviewComment" rows="3" placeholder="请写下你对《公司战略与风险管理》课程的感受、建议或收获 ..." maxlength="500"></textarea>
+        </div>
+        <button class="submit-btn" id="submitReviewBtn"><i class="fas fa-paper-plane"></i> 提交评价</button>
+    </div>
+
+    <!-- 评论区 -->
+    <div class="comments-section">
+        <div class="section-title">
+            <i class="fas fa-comments"></i> 学生评价 · 共话战略
+        </div>
+        <div id="commentsContainer" class="comments-list">
+            <!-- 动态渲染评论列表 -->
+            <div class="empty-msg">加载评论中...</div>
+        </div>
+    </div>
+    <footer>© 课程质量反馈平台 · 真实评价 共同进步 | 数据保存在您的浏览器中</footer>
+</div>
+
+<script>
+    // ---------- 存储 KEY ----------
+    const STORAGE_KEY = "CorpStrategyReviews";
+
+    // ---------- 辅助函数 ----------
+    // 转义HTML防止XSS
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // 获取当前时间字符串
+    function getCurrentTime() {
+        const now = new Date();
+        return `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()} ${now.getHours()}:${now.getMinutes().toString().padStart(2,'0')}`;
+    }
+
+    // 默认初始数据 (让页面不空旷，展示课程案例)
+    function getDefaultReviews() {
+        return [
+            {
+                id: "default_1",
+                rating: 5,
+                reviewer: "财务管理22级-王思睿",
+                comment: "老师结合华为、顺博合金等本土案例，将战略管理理论讲得很透彻。特别是思政融入恰到好处，民族自豪感油然而生！",
+                date: "2025-10-12 14:32"
+            },
+            {
+                id: "default_2",
+                rating: 4,
+                reviewer: "李华",
+                comment: "SWOT分析和波特五力模型讲解清晰，AI工具翻转课堂很有意思。希望增加更多互动环节～",
+                date: "2025-10-28 09:15"
+            },
+            {
+                id: "default_3",
+                rating: 5,
+                reviewer: "陈雅婷",
+                comment: "课程设计很有高度，不仅学到公司战略，还懂得了个人核心竞争力。千里科技案例热血沸腾！",
+                date: "2025-11-05 20:47"
+            }
+        ];
+    }
+
+    // 加载评论列表 (localStorage)
+    function loadReviews() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored);
+                if (Array.isArray(parsed) && parsed.length) {
+                    return parsed;
+                } else {
+                    // 数据为空数组则给默认
+                    const defaults = getDefaultReviews();
+                    saveReviews(defaults);
+                    return defaults;
+                }
+            } catch(e) {
+                const defaults = getDefaultReviews();
+                saveReviews(defaults);
+                return defaults;
+            }
+        } else {
+            const defaults = getDefaultReviews();
+            saveReviews(defaults);
+            return defaults;
+        }
+    }
+
+    function saveReviews(reviews) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
+    }
+
+    // 计算平均分 & 统计数量
+    function computeStats(reviews) {
+        if (!reviews.length) return { avg: 0, total: 0 };
+        let sum = 0;
+        reviews.forEach(r => { sum += r.rating; });
+        const avg = sum / reviews.length;
+        return { avg: avg, total: reviews.length };
+    }
+
+    // 根据平均分数渲染星星 (纯文本显示)
+    function renderAvgStars(avg) {
+        const fullCount = Math.floor(avg);
+        const half = (avg - fullCount) >= 0.5 ? 1 : 0;
+        let starStr = '';
+        for (let i = 0; i < fullCount; i++) starStr += '★';
+        if (half) starStr += '½';
+        for (let i = 0; i < (5 - fullCount - half); i++) starStr += '☆';
+        return starStr;
+    }
+
+    // 根据数字评分渲染小星星 (用于评论列表)
+    function renderRatingStars(rating) {
+        let html = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= rating) html += '<i class="fas fa-star" style="color:#f5b042; font-size:0.8rem;"></i>';
+            else html += '<i class="far fa-star" style="color:#cbd5e1; font-size:0.8rem;"></i>';
+        }
+        return html;
+    }
+
+    // 渲染评论列表和统计卡片
+    function renderAll() {
+        const reviews = loadReviews();
+        // 更新统计
+        const { avg, total } = computeStats(reviews);
+        const avgScoreElem = document.getElementById('avgScore');
+        const reviewCountElem = document.getElementById('reviewCount');
+        const avgStarsDisplay = document.getElementById('avgStarsDisplay');
+        avgScoreElem.innerText = avg.toFixed(1);
+        reviewCountElem.innerText = `${total} 条评价`;
+        avgStarsDisplay.innerText = renderAvgStars(avg);
+
+        // 渲染评论列表
+        const container = document.getElementById('commentsContainer');
+        if (!reviews.length) {
+            container.innerHTML = '<div class="empty-msg"><i class="far fa-comment-dots"></i> 还没有评价，快来成为第一个点评的同学吧！</div>';
+            return;
+        }
+
+        let commentsHtml = '';
+        reviews.slice().reverse().forEach(review => {   // 倒序显示最新的在上
+            const safeName = escapeHtml(review.reviewer) || "匿名同学";
+            const safeComment = escapeHtml(review.comment);
+            const starsHtml = renderRatingStars(review.rating);
+            commentsHtml += `
+                <div class="comment-item" data-id="${review.id}">
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            <i class="fas fa-user-circle"></i> ${safeName}
+                            <span class="comment-stars">${starsHtml}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="comment-date"><i class="far fa-calendar-alt"></i> ${review.date}</span>
+                            <button class="delete-comment" data-id="${review.id}" title="删除评价"><i class="fas fa-times-circle"></i></button>
+                        </div>
+                    </div>
+                    <div class="comment-text">${safeComment}</div>
+                </div>
+            `;
+        });
+        container.innerHTML = commentsHtml;
+
+        // 绑定删除事件
+        document.querySelectorAll('.delete-comment').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                if (confirm('确定要删除这条评价吗？')) {
+                    deleteReviewById(id);
+                }
+            });
+        });
+    }
+
+    // 删除评论
+    function deleteReviewById(id) {
+        let reviews = loadReviews();
+        const newReviews = reviews.filter(r => r.id !== id);
+        if (newReviews.length === reviews.length) return;
+        saveReviews(newReviews);
+        renderAll();       // 刷新界面
+        // 重新刷新评分星星的选中状态（保持表单未提交前的评分保留，但表单独立状态不动，但为了交互不清空已选分）
+        // 可选保留用户的评分选择，不做额外操作
+    }
+
+    // 清空所有评论
+    function clearAllReviews() {
+        if (confirm('⚠️ 警告：将清空所有学生评分和评论，不可恢复。确定要重置吗？')) {
+            saveReviews([]);
+            renderAll();
+            // 表单不清空，但之前选的评分保留显示，以免用户体验突兀
+        }
+    }
+
+    // 生成短id
+    function generateId() {
+        return Date.now() + '-' + Math.random().toString(36).substr(2, 6);
+    }
+
+    // 提交新评论
+    function addNewReview(rating, reviewerName, commentText) {
+        if (!rating || rating < 1 || rating > 5) {
+            alert('请选择评分 (1-5星)');
+            return false;
+        }
+        if (!commentText || commentText.trim() === '') {
+            alert('请填写评价内容～');
+            return false;
+        }
+        if (commentText.length > 500) {
+            alert('评价内容过长，限500字');
+            return false;
+        }
+        let finalName = reviewerName.trim();
+        if (finalName === '') finalName = '匿名同学';
+        if (finalName.length > 30) finalName = finalName.slice(0,30);
+        const newReview = {
+            id: generateId(),
+            rating: rating,
+            reviewer: finalName,
+            comment: commentText.trim(),
+            date: getCurrentTime()
+        };
+        const reviews = loadReviews();
+        reviews.push(newReview);
+        saveReviews(reviews);
+        renderAll();
+        return true;
+    }
+
+    // ---------- 星级评分交互组件 ----------
+    let currentRating = 0;   // 当前选中的分数
+    function initStarRating() {
+        const stars = document.querySelectorAll('#starRatingWidget i');
+        const selectedMsg = document.getElementById('selectedRatingMsg');
+        
+        function updateStarsUI(rating) {
+            stars.forEach((star, idx) => {
+                const value = parseInt(star.getAttribute('data-value'));
+                if (value <= rating) {
+                    star.className = 'fas fa-star';
+                    star.classList.add('active');
+                } else {
+                    star.className = 'far fa-star';
+                    star.classList.remove('active');
+                }
+            });
+            if (rating > 0) {
+                selectedMsg.innerHTML = `⭐ 当前评分：${rating} 星`;
+            } else {
+                selectedMsg.innerHTML = '未选择评分';
+            }
+        }
+        
+        stars.forEach(star => {
+            // 鼠标悬浮
+            star.addEventListener('mouseenter', (e) => {
+                const hoverVal = parseInt(star.getAttribute('data-value'));
+                stars.forEach((s, idx) => {
+                    const sVal = parseInt(s.getAttribute('data-value'));
+                    if (sVal <= hoverVal) {
+                        s.className = 'fas fa-star';
+                        s.style.color = '#f5b042';
+                    } else {
+                        s.className = 'far fa-star';
+                        s.style.color = '#cbd5e1';
+                    }
+                });
+            });
+            star.addEventListener('mouseleave', () => {
+                // 恢复当前实际选中的分值
+                updateStarsUI(currentRating);
+            });
+            star.addEventListener('click', (e) => {
+                const clickedVal = parseInt(star.getAttribute('data-value'));
+                currentRating = clickedVal;
+                updateStarsUI(currentRating);
+            });
+        });
+        // 初始状态
+        updateStarsUI(0);
+        
+        // 提供外部获取评分函数
+        window.getCurrentRating = () => currentRating;
+    }
+    
+    // 重置表单评分 (不清除别的字段，但清理评分选择)
+    function resetFormRating() {
+        currentRating = 0;
+        const stars = document.querySelectorAll('#starRatingWidget i');
+        const selectedMsg = document.getElementById('selectedRatingMsg');
+        stars.forEach(star => {
+            star.className = 'far fa-star';
+            star.style.color = '#cbd5e1';
+        });
+        selectedMsg.innerHTML = '未选择评分';
+        document.getElementById('reviewerName').value = '';
+        document.getElementById('reviewComment').value = '';
+    }
+    
+    // 处理提交
+    function handleSubmit() {
+        const rating = currentRating;
+        const reviewer = document.getElementById('reviewerName').value;
+        const comment = document.getElementById('reviewComment').value;
+        const success = addNewReview(rating, reviewer, comment);
+        if (success) {
+            // 提交成功后重置评分和表单内容，保留昵称建议也可清空，但为了连续提交清空较好
+            currentRating = 0;
+            const stars = document.querySelectorAll('#starRatingWidget i');
+            const selectedMsg = document.getElementById('selectedRatingMsg');
+            stars.forEach(star => {
+                star.className = 'far fa-star';
+                star.style.color = '#cbd5e1';
+            });
+            selectedMsg.innerHTML = '未选择评分';
+            document.getElementById('reviewerName').value = '';
+            document.getElementById('reviewComment').value = '';
+            // 滚动提示
+            setTimeout(() => {
+                const container = document.querySelector('.comments-section');
+                container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    }
+
+    // ---------- 页面启动 ----------
+    document.addEventListener('DOMContentLoaded', () => {
+        // 初始化星级组件
+        initStarRating();
+        // 渲染已有数据
+        renderAll();
+        // 绑定提交按钮
+        const submitBtn = document.getElementById('submitReviewBtn');
+        if (submitBtn) submitBtn.addEventListener('click', handleSubmit);
+        
+        const clearBtn = document.getElementById('clearAllBtn');
+        if (clearBtn) clearBtn.addEventListener('click', clearAllReviews);
+        
+        // 添加键盘快捷辅助
+        const commentArea = document.getElementById('reviewComment');
+        if (commentArea) {
+            commentArea.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSubmit();
+                }
+            });
+        }
+        
+        // 附加提示：展示示例数据（默认已有）
+    });
+</script>
+</body>
+</html>
